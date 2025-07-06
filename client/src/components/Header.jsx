@@ -4,11 +4,18 @@ import { AiOutlineSearch } from 'react-icons/ai';
 import { FaMoon } from 'react-icons/fa';
 import { useSelector, useDispatch } from "react-redux";
 import { toggleTheme } from "../assets/redux/theme/themeSlice";
+import { signoutSuccess } from "../assets/redux/user/userSlice";
+
 
 export default function Header() {
   const path = useLocation().pathname;
   const dispatch = useDispatch();
   const { currentUser } = useSelector(state => state.user);
+   const handleSignOut = () => {
+    dispatch(signoutSuccess());
+    localStorage.removeItem('currentUser');
+    window.location.reload();
+  };
 
   return (
     <Navbar className="border-b-2">

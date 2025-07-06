@@ -1,8 +1,5 @@
-import { useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { signInSuccess } from "./assets/redux/user/userSlice";
-
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import './index.css';
 import Home from "./pages/Home";
 import About from "./pages/About";
 import SignIn from "./pages/SignIn";
@@ -11,33 +8,39 @@ import Dashboard from "./pages/Dashboard";
 import Projects from "./pages/Projects";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
+import CreatePost from "./pages/CreatePost";
 import { PrivateRoute } from "./components/PrivateRoute";
+import { OnlyAdminPrivateRoute } from "./components/OnlyAdminPrivateRoute";
+import ThemeProvider from "./components/ThemeProvider"; 
+import UpdatePost from "./pages/UpdatePost";
+import PostPage from "./pages/PostPage";
 
 export default function App() {
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(signInSuccess({
-      username: "khushbu_yadav123",
-      email: "khushbu@gmail.com",
-      profilePicture: "/profile.png",
-    }));
-  }, [dispatch]);
   return (
-    <BrowserRouter>
-      <Header />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/sign-in" element={<SignIn />} />
-        <Route path="/sign-up" element={<SignUp />} />
-        <Route path="/projects" element={<Projects />} />
-        
-        <Route element={<PrivateRoute />}>
-          <Route path="/dashboard" element={<Dashboard />} />
-        </Route>
-      </Routes>
-      <Footer />
-    </BrowserRouter>
+    <ThemeProvider>
+      <BrowserRouter>
+        <Header />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/sign-in" element={<SignIn />} />
+          <Route path="/sign-up" element={<SignUp />} />
+          <Route path="/projects" element={<Projects />} />
+
+          <Route element={<PrivateRoute />}>
+            <Route path="/dashboard" element={<Dashboard />} />
+          </Route>
+            <Route path="/post/:postSlug" element={<PostPage />} />
+          <Route element={<OnlyAdminPrivateRoute />}>
+            <Route path="/create-post" element={<CreatePost />} />
+            <Route path="/update-post/:postId" element={<UpdatePost />} />
+           
+
+
+          </Route>
+        </Routes>
+        <Footer />
+      </BrowserRouter>
+    </ThemeProvider>
   );
 }

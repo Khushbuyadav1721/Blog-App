@@ -1,7 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+const storedUser = localStorage.getItem("currentUser");
+
 const initialState = {
-  currentUser: null,
+  currentUser: storedUser ? JSON.parse(storedUser) : null,
   error: null,
   loading: false,
 };
@@ -15,29 +17,59 @@ const userSlice = createSlice({
       state.error = null;
     },
     signInSuccess: (state, action) => {
-      state.loading = false;
       state.currentUser = action.payload;
+      state.loading = false;
       state.error = null;
     },
     signInFailure: (state, action) => {
       state.loading = false;
       state.error = action.payload;
     },
-
-    // ✅ NEW: Update only the profilePicture of currentUser
-    updateUserProfilePicture: (state, action) => {
-      if (state.currentUser) {
-        state.currentUser.profilePicture = action.payload;
-      }
+    updateStart: (state) => {
+      state.loading = true;
+      state.error = null;
+    },
+    updateSuccess: (state, action) => {
+      state.currentUser = action.payload;
+      state.loading = false;
+      state.error = null;
+    },
+    updateFailure: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
+    deleteUserStart: (state) => {
+      state.loading = true;
+      state.error = null;
+    },
+    deleteUserSuccess: (state) => {
+      state.currentUser = null;
+      state.loading = false;
+      state.error = null;
+    },
+    deleteUserFailure: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
+    signoutSuccess: (state) => {
+      state.currentUser = null;
+      state.loading = false;
+      state.error = null;
     },
   },
 });
 
 export const {
   signInStart,
-  signInFailure,
   signInSuccess,
-  updateUserProfilePicture, // export the new action
+  signInFailure,
+  updateStart,
+  updateSuccess,
+  updateFailure,
+  deleteUserStart,
+  deleteUserSuccess,
+  deleteUserFailure, // ✅ make sure this is exported
+  signoutSuccess,
 } = userSlice.actions;
 
 export default userSlice.reducer;

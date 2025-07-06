@@ -1,17 +1,13 @@
-// Import the functions you need from the SDKs you need
+// firebase.js
 import { initializeApp } from "firebase/app";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
 
-// Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
-  authDomain: "blog-app-49192.firebaseapp.com",
-  projectId: "blog-app-49192",
-  storageBucket: "blog-app-49192.firebasestorage.app",
-  messagingSenderId: "1028560160399",
-  appId: "1:1028560160399:web:ab29323d17d8ef914ed2fa"
+  apiKey: "AIzaSyDT6MZgl4ozrP2cREYhEcyOtMjJIKT2LJo",
+  authDomain: "open-upload-test.firebaseapp.com",
+  projectId: "open-upload-test",
+  storageBucket: "open-upload-test.appspot.com",
+  messagingSenderId: "445577733528",
+  appId: "1:445577733528:web:67edb6e94fc014f33e8b09",
 };
 
-// Initialize Firebase
- export const app = initializeApp(firebaseConfig);
+export const app = initializeApp(firebaseConfig);
