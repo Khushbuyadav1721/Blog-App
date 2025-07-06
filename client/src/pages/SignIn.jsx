@@ -32,7 +32,7 @@ export default function SignIn() {
     }
 
     // ✅ Simulated Admin Logic
-    const isAdmin = email === 'khushbu@gmail.com'; // Make this your admin email
+    const isAdmin = email === 'khushbuyadav2529@gmail.com'; // Make this your admin email
 
     const user = {
       username: email.split('@')[0],
