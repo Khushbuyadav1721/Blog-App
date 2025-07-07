@@ -14,16 +14,20 @@ import { OnlyAdminPrivateRoute } from "./components/OnlyAdminPrivateRoute";
 import ThemeProvider from "./components/ThemeProvider"; 
 import UpdatePost from "./pages/UpdatePost";
 import PostPage from "./pages/PostPage";
+import ScrollToTop from "./components/ScrollToTop";
+import Search from "./components/Search";
 
 export default function App() {
   return (
     <ThemeProvider>
       <BrowserRouter>
+      <ScrollToTop/>
         <Header />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
           <Route path="/sign-in" element={<SignIn />} />
+          <Route path="/search" element={<Search />} />
           <Route path="/sign-up" element={<SignUp />} />
           <Route path="/projects" element={<Projects />} />
 

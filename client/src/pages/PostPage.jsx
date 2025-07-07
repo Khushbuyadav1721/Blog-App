@@ -1,12 +1,16 @@
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { Button, Spinner } from "flowbite-react";
+import CallToAction from "../components/CallToAction";
+import CommentSection from "../components/CommentSection";
+import PostCard from "../components/PostCard"; // ✅ Correct import
 
 export default function PostPage() {
   const { postSlug } = useParams();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [post, setPost] = useState(null);
+  const [recentPosts, setRecentPosts] = useState(null);
 
   useEffect(() => {
     const fetchPost = () => {
@@ -28,6 +32,22 @@ export default function PostPage() {
       }
     };
     fetchPost();
+  }, [postSlug]);
+
+  useEffect(() => {
+    const fetchRecentPosts = async () => {
+      try {
+        const storedPosts = JSON.parse(localStorage.getItem("posts")) || [];
+        const filtered = storedPosts
+          .filter((p) => p.slug !== postSlug)
+          .slice(0, 3);
+        setRecentPosts(filtered);
+      } catch (error) {
+        console.log(error.message);
+      }
+    };
+
+    fetchRecentPosts();
   }, [postSlug]);
 
   if (loading) {
@@ -64,10 +84,25 @@ export default function PostPage() {
       </div>
 
       <div
-         className="p-3 max-w-2xl mx-auto w-full post-content space-y-6"
-         dangerouslySetInnerHTML={{ __html: post?.content }}
+        className="p-3 max-w-2xl mx-auto w-full post-content space-y-6"
+        dangerouslySetInnerHTML={{ __html: post?.content }}
       ></div>
 
+      <div className="max-w-4xl mx-auto w-full">
+        <CallToAction />
+      </div>
+
+      <CommentSection postId={post._id} />
+
+      <div className="flex flex-col justify-center items-center mb-5">
+        <h1 className="text-xl mt-5">Recent articles</h1>
+        <div className="flex flex-wrap gap-5 mt-5 justify-center">
+          {recentPosts &&
+            recentPosts.map((p) => (
+              <PostCard key={p._id} post={p} />
+            ))}
+        </div>
+      </div>
     </main>
   );
 }

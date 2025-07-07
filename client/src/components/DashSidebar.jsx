@@ -1,7 +1,7 @@
 import { Sidebar } from "flowbite-react";
-import { HiUser, HiArrowSmRight, HiDocumentText, HiOutlineUserGroup } from "react-icons/hi";
+import { HiUser, HiArrowSmRight, HiDocumentText, HiOutlineUserGroup, HiAnnotation, HiChartPie } from "react-icons/hi";
 import { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { signoutSuccess } from "../assets/redux/user/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -30,6 +30,18 @@ export default function DashSidebar() {
     <Sidebar className="w-full md:w-56 min-h-screen bg-white dark:bg-gray-900">
       <Sidebar.Items>
         <Sidebar.ItemGroup className="flex flex-col gap-1">
+           
+          {currentUser?.isAdmin && (
+            <Link to="/dashboard?tab=dash">
+             <Sidebar.Item
+               active={tab === 'dash' || !tab}
+               icon={HiChartPie}
+               as="div"
+               >
+               Dashboard
+             </Sidebar.Item>
+            </Link>
+           )}
 
           {/* Profile Tab */}
           <Sidebar.Item
@@ -57,6 +69,8 @@ export default function DashSidebar() {
           >
             Posts
           </Sidebar.Item>
+
+          {/* Users Tab */}
           <Sidebar.Item
             icon={HiOutlineUserGroup}
             active={tab === "users"}
@@ -65,6 +79,17 @@ export default function DashSidebar() {
             as="div"
           >
             Users
+          </Sidebar.Item>
+
+          {/* Comments Tab */}
+          <Sidebar.Item
+            icon={HiAnnotation}
+            active={tab === "comments"}
+            className="cursor-pointer dark:text-white text-gray-900"
+            onClick={() => navigate("/dashboard?tab=comments")}
+            as="div"
+          >
+            Comments
           </Sidebar.Item>
 
           {/* Sign Out */}
