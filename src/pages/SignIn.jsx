@@ -2,14 +2,11 @@ import { Alert, Button, Label, Spinner, TextInput } from 'flowbite-react';
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { signInStart,signInSuccess,signoutSuccess } from '../assets/redux/user/userSlice';
-import { signInWithEmailAndPassword } from 'firebase/auth';
-import { app } from '../firebase';
-import { auth } from '../firebase';
+import { signInStart, signInSuccess,signInFailure } from '../assets/redux/user/userSlice';
 import OAuth from '../components/OAuth';
 
 export default function SignIn() {
-  const [formData, setFormData] = useState({ email: '', password: '' });
+  const [formData, setFormData] = useState({});
   const { loading, error: errorMessage } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -26,25 +23,21 @@ export default function SignIn() {
 
     try {
       dispatch(signInStart());
-      const userCredential = await signInWithEmailAndPassword(
-        auth,
-        formData.email,
-        formData.password
-      );
-      const user = userCredential.user;
 
-      const userData = {
-        username: user.displayName || user.email.split('@')[0],
-        email: user.email,
-        profilePicture: user.photoURL || '/profile.png',
-        isAdmin: user.email === 'khushbuyadav2529@gmail.com',
+      const isAdmin = formData.email === 'khushbuyadav2529@gmail.com';
+
+      const user = {
+        username: formData.email.split('@')[0],
+        email: formData.email,
+        profilePicture: '/profile.png',
+        isAdmin,
       };
 
-      dispatch(signInSuccess(userData));
-      localStorage.setItem('currentUser', JSON.stringify(userData));
+      dispatch(signInSuccess(user));
+      localStorage.setItem('currentUser', JSON.stringify(user));
       navigate('/');
     } catch (error) {
-      dispatch(signInFailure('Invalid email or password.'));
+      dispatch(signInFailure('Sign in failed. Please try again.'));
     }
   };
 
@@ -56,12 +49,11 @@ export default function SignIn() {
           <Link to='/' className='font-bold dark:text-white text-4xl'>
             <span className='px-2 py-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-lg text-white'>
               Khushbu's
-            </span>{' '}
+            </span>
             Blog
           </Link>
           <p className='text-sm mt-5'>
-            This is a demo project. You can sign in with your email and password
-            or with Google.
+            This is a demo project. You can sign in with your email and password or with Google.
           </p>
         </div>
 
@@ -81,7 +73,7 @@ export default function SignIn() {
               <Label value='Your password' />
               <TextInput
                 type='password'
-                placeholder='********'
+                placeholder='**********'
                 id='password'
                 onChange={handleChange}
               />
@@ -102,14 +94,12 @@ export default function SignIn() {
             </Button>
             <OAuth />
           </form>
-
           <div className='flex gap-2 text-sm mt-5'>
-            <span>Don't have an account?</span>
+            <span>Don’t have an account?</span>
             <Link to='/sign-up' className='text-blue-500'>
               Sign Up
             </Link>
           </div>
-
           {errorMessage && (
             <Alert className='mt-5' color='failure'>
               {errorMessage}
